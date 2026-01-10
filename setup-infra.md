@@ -1,3 +1,9 @@
+
+Refer below pdf for more details:
+
+
+[Microservices Project .pdf](https://github.com/user-attachments/files/22067416/Microservices.Project.pdf)
+Create IAM user and attach required polices 
 ## First Create a user in AWS IAM with any name
 ## Attach Policies to the newly created user
 ## below policies
