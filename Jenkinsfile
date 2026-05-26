@@ -5,8 +5,9 @@ pipeline {
         stage('Build & Tag Docker Image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker build -t saamrajepatil/adservice:latest ."
+                    withDockerRegistry(credentialsId: 'docker-cred') {
+                        sh "/usr/bin/docker build -t saamrajepatil/cartservice:latest ."
+           }
                     }
                 }
             }
