@@ -2,26 +2,24 @@ pipeline {
     agent any
 
     stages {
-
-        stage('Build Docker Image') {
+        stage('Build & Tag Docker Image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker-cred') {
-                        sh "/usr/bin/docker build -t saamrajepatil/cartservice:latest ."
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker build -t saamrajepatil/adservice:latest ."
                     }
                 }
             }
         }
-
+        
         stage('Push Docker Image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker-cred') {
-                        sh "/usr/bin/docker push saamrajepatil/cartservice:latest"
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker push saamrajepatil/adservice:latest "
                     }
                 }
             }
         }
-
     }
 }
