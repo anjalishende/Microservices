@@ -1,28 +1,38 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Build & Tag Docker Image') {
-            steps {
-                script {
-                    dir('src') {
+    environment {
+        DOCKER = "/usr/bin/docker"
+        IMAGE = "anjalishende/cartservice:latest"
+    }
 
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker build -t anjalishende/cartservice:latest ."
-                    }
-                        }
+    stages {
+
+        stage('Build Docker Image') {
+            steps {
+                sh "${DOCKER} build -t ${IMAGE} ."
+            }
+        }
+
+        stage('Login to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-cred',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh """
+                    echo \$DOCKER_PASS | ${DOCKER} login -u \$DOCKER_USER --password-stdin
+                    """
                 }
             }
         }
-        
+
         stage('Push Docker Image') {
             steps {
-                script {
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push anjalishende/cartservice:latest "
-                    }
-                }
+                sh "${DOCKER} push ${IMAGE}"
             }
         }
+
     }
 }
