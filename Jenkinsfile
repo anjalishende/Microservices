@@ -10,9 +10,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                dir('src') {
-                    sh "${DOCKER} build -t ${IMAGE} ."
-                }
+                sh "${DOCKER} build -t ${IMAGE} ."
             }
         }
 
@@ -35,6 +33,5 @@ pipeline {
                 sh "${DOCKER} push ${IMAGE}"
             }
         }
-
     }
 }
