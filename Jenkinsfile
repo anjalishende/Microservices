@@ -1,25 +1,37 @@
-pipeline { 
+pipeline {
     agent any
 
+    environment {
+        IMAGE = "anjalishende/shippingservice:latest"
+    }
+
     stages {
-        stage('Build & Tag Docker Image') {
+
+        stage('Build Docker Image') {
             steps {
-                script {
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker build -t saamrajepatil/shippingservice:latest ."
-                    }
+                sh "docker build -t ${IMAGE} ."
+            }
+        }
+
+        stage('Login to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-cred',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh """
+                    echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
+                    """
                 }
             }
         }
-        
+
         stage('Push Docker Image') {
             steps {
-                script {
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push saamrajepatil/shippingservice:latest "
-                    }
-                }
+                sh "docker push ${IMAGE}"
             }
         }
+
     }
 }
