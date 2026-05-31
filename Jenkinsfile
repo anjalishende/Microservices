@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        DOCKER = "/usr/bin/docker"
         IMAGE = "anjalishende/loadgenerator:latest"
     }
 
@@ -10,11 +9,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // 👉 If Dockerfile is in src, keep dir('src')
-                // 👉 Else remove dir('src')
-                dir('src') {
-                    sh "${DOCKER} build -t ${IMAGE} ."
-                }
+                sh "docker build -t ${IMAGE} ."
             }
         }
 
@@ -26,7 +21,7 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh """
-                    echo \$DOCKER_PASS | ${DOCKER} login -u \$DOCKER_USER --password-stdin
+                    echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
                     """
                 }
             }
@@ -34,8 +29,9 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                sh "${DOCKER} push ${IMAGE}"
+                sh "docker push ${IMAGE}"
             }
         }
+
     }
 }
