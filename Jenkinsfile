@@ -10,11 +10,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // 👉 If Dockerfile is inside src, keep dir('src')
-                // 👉 Otherwise remove dir('src')
-                dir('src') {
-                    sh "${DOCKER} build -t ${IMAGE} ."
-                }
+                sh "${DOCKER} build -t ${IMAGE} ."
             }
         }
 
