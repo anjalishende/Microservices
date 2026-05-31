@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER = "/usr/bin/docker"
-        IMAGE = "anjalishende/cartservice:latest"
+        IMAGE = "anjalishende/adservice:latest"
     }
 
     stages {
